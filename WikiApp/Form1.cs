@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,7 +14,6 @@ namespace WikiApp
 {
     public partial class WikiApp : Form
     {
-        const string fileName = "definitions.dat";
         const int rows = 12;
         const int columns = 4;
         // 9.1 Create a global 2D string array, use static variables for the dimensions (row = 4, column = 12),
@@ -234,8 +234,22 @@ namespace WikiApp
         // 9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            // Create and configure SaveFielDialog
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Title = "Select dat file to save to",
+                Filter = "DAT files|*.dat"
+            };
+
+            // Open the save file dialog and prompt the user to select a file to save to
+            if (sfd.ShowDialog() != DialogResult.OK)
+            {
+                // Nothing was selected, lets get out of here
+                return;
+            }
+
             // Open file to save data to
-            using (var stream = File.Open(fileName, FileMode.Create))
+            using (var stream = File.Open(sfd.FileName, FileMode.Create))
             {
                 // Create a binary writer to write data to the file
                 using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
@@ -251,17 +265,31 @@ namespace WikiApp
                 }
             }
 
-            updateStatus("Saving to " + fileName + " complete.");
+            updateStatus("Saving to " + Path.GetFileName(sfd.FileName) + " complete.");
         }
 
         // 9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
+            // Create and configure OpenFileDialog
+            OpenFileDialog ofd = new OpenFileDialog
+            {
+                Title = "Open dat file",
+                Filter = "DAT files|*.dat"
+            };
+
+            // Open a file dialog box and prompt the user to select a file to open
+            if (ofd.ShowDialog() != DialogResult.OK)
+            {
+                // No file was selected, lets get out of here
+                return;
+            }
+
             // Check if the file exists
-            if (File.Exists(fileName))
+            if (File.Exists(ofd.FileName))
             {
                 // Open the file
-                using (var stream = File.Open(fileName, FileMode.Open))
+                using (var stream = File.Open(ofd.FileName, FileMode.Open))
                 {
                     // Create a reader to read from the file stream
                     using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
@@ -278,12 +306,12 @@ namespace WikiApp
                 }
 
                 // Update display
-                updateStatus("Reading file '" + fileName + "' complete.");
+                updateStatus("Reading file '" + ofd.SafeFileName + "' complete.");
                 updateDisplay();
             }
             else
             {
-                updateStatus("Unable to open file '" + fileName + "'. File does not exist.");
+                updateStatus("Unable to open file '" + ofd.SafeFileName + "'. File does not exist.");
             }
         }
 
