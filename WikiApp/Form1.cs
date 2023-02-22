@@ -18,10 +18,27 @@ namespace WikiApp
         const int columns = 4;
         // 9.1 Create a global 2D string array, use static variables for the dimensions (row = 4, column = 12),
         string[,] wiki = new string[rows, columns];
+
         public WikiApp()
         {
             InitializeComponent();
             initializeWiki();
+        }
+
+        private int compareWikiString(string wikiStringA, string wikiStringB)
+        {
+            // Consider empty strings to be greater when compared against anything
+            if (string.IsNullOrEmpty(wikiStringA))
+            {
+                return 1;
+            } 
+            else if (!string.IsNullOrEmpty(wikiStringA) && string.IsNullOrEmpty(wikiStringB))
+            {
+                return -1;
+            }
+
+            // Otherwise return the result of a regular string comparison
+            return string.Compare(wikiStringA, wikiStringB);
         }
 
         private void initializeWiki()
@@ -58,7 +75,7 @@ namespace WikiApp
             }
         }
 
-        // 9.5	Create a CLEAR method to clear the four text boxes so a new definition can be added,
+        // 9.5 Create a CLEAR method to clear the four text boxes so a new definition can be added,
         private void clearFields()
         {
             // Reset each field to an empty string
@@ -68,7 +85,7 @@ namespace WikiApp
             textBoxDefinition.Text = "";
         }
 
-        // 9.8	Create a display method that will show the following information in a ListView: Name and Category,
+        // 9.8 Create a display method that will show the following information in a ListView: Name and Category,
         private void displayFieldData(int index)
         {
             // Update input fields to reflect the data
@@ -78,7 +95,7 @@ namespace WikiApp
             textBoxDefinition.Text = wiki[index, 3];
         }
 
-        //9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
+        //9.2 Create an ADD button that will store the information from the 4 text boxes into the 2D array,
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
@@ -120,7 +137,7 @@ namespace WikiApp
 
         }
 
-        // 9.9	Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
+        // 9.9 Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void listViewDisplay_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -135,7 +152,7 @@ namespace WikiApp
             }
         }
 
-        //9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
+        // 9.3 Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             // Validate input
@@ -300,14 +317,9 @@ namespace WikiApp
             {
                 for (int swapIndex = 0; swapIndex < rows - 1 - row; swapIndex++)
                 {
-                    // Check if either entry is empty
-                    if (string.IsNullOrEmpty(wiki[swapIndex, 0]) || string.IsNullOrEmpty(wiki[swapIndex + 1, 0]))
+                    if (compareWikiString(wiki[swapIndex, 0], wiki[swapIndex + 1, 0]) > 0)
                     {
-                        // Count empty strings as large so they end up on the bottom
-                        continue;
-                    }
-                    else if (string.Compare(wiki[swapIndex, 0], wiki[swapIndex + 1, 0]) == 1)
-                    {
+                        // Swap swapIndex with swapIndex + 1
                         swap(swapIndex);
                     }
                 }
@@ -347,7 +359,7 @@ namespace WikiApp
                     continue;
                 }
 
-                comparisonResult = string.Compare(wiki[mid, 0], target);
+                comparisonResult = compareWikiString(wiki[mid, 0], target);
 
                 // Check for match
                 if (comparisonResult == 0)
@@ -359,7 +371,7 @@ namespace WikiApp
                 }
 
                 // Move the first and last if applicable
-                if (comparisonResult == 1)
+                if (comparisonResult > 0)
                 {
                     last = mid - 1;
                 }
