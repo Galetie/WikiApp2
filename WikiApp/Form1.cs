@@ -16,6 +16,7 @@ namespace WikiApp
         const string fileName = "definitions.dat";
         const int rows = 12;
         const int columns = 4;
+        // 9.1 Create a global 2D string array, use static variables for the dimensions (row = 4, column = 12),
         string[,] wiki = new string[rows, columns];
         public WikiApp()
         {
@@ -57,6 +58,7 @@ namespace WikiApp
             }
         }
 
+        // 9.5	Create a CLEAR method to clear the four text boxes so a new definition can be added,
         private void clearFields()
         {
             // Reset each field to an empty string
@@ -66,6 +68,7 @@ namespace WikiApp
             textBoxDefinition.Text = "";
         }
 
+        // 9.8	Create a display method that will show the following information in a ListView: Name and Category,
         private void displayFieldData(int index)
         {
             // Update input fields to reflect the data
@@ -75,6 +78,7 @@ namespace WikiApp
             textBoxDefinition.Text = wiki[index, 3];
         }
 
+        //9.2	Create an ADD button that will store the information from the 4 text boxes into the 2D array,
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
@@ -116,6 +120,7 @@ namespace WikiApp
 
         }
 
+        // 9.9	Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void listViewDisplay_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -130,6 +135,7 @@ namespace WikiApp
             }
         }
 
+        //9.3	Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             // Validate input
@@ -172,6 +178,7 @@ namespace WikiApp
             updateStatus("Unable to update wiki item. No item selected.");
         }
 
+        //9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -207,6 +214,7 @@ namespace WikiApp
             updateStatus("Unable to delete wiki item. No item selected.");
         }
 
+        // 9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void buttonSave_Click(object sender, EventArgs e)
         {
             // Open file to save data to
@@ -229,6 +237,7 @@ namespace WikiApp
             updateStatus("Saving to " + fileName + " complete.");
         }
 
+        // 9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             // Check if the file exists
@@ -282,6 +291,7 @@ namespace WikiApp
             wiki[index + 1, 3] = definition;
         }
 
+        //9.6	Write the code for a Bubble Sort method to sort the 2D array by Name ascending, ensure you use a separate swap method that passes the array element to be swapped (do not use any built-in array methods),
         private void buttonSort_Click(object sender, EventArgs e)
         {
             // Bubble sort the array
@@ -308,6 +318,7 @@ namespace WikiApp
             updateDisplay();
         }
 
+        //9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             // validate the search term
