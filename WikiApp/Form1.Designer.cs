@@ -270,6 +270,7 @@
             // 
             // statusStripLabel
             // 
+            this.statusStripLabel.BackColor = System.Drawing.Color.Transparent;
             this.statusStripLabel.Name = "statusStripLabel";
             this.statusStripLabel.Size = new System.Drawing.Size(0, 17);
             // 
@@ -283,6 +284,7 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.listViewDisplay);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "WikiApp";
             this.Text = "WikiApp";
             this.groupBox1.ResumeLayout(false);

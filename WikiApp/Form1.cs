@@ -14,6 +14,9 @@ namespace WikiApp
 {
     public partial class WikiApp : Form
     {
+        // Time will gradually update the status strip colour until default
+        static Timer statusStripUpdater = new Timer();
+
         const int rows = 12;
         const int columns = 4;
         // 9.1 Create a global 2D string array, use static variables for the dimensions (row = 4, column = 12),
@@ -23,6 +26,31 @@ namespace WikiApp
         {
             InitializeComponent();
             initializeWiki();
+
+            // Configure timer
+            statusStripUpdater.Tick += statusStripColourFade;
+            statusStripUpdater.Interval = 5;
+        }
+
+        private void statusStripColourFade(object sender, EventArgs e)
+        {
+            // By how much to fade the current colour
+            const int reductionFactor = 3;
+
+            // Get the current colour of the status strip
+            Color current = statusStrip.BackColor;
+            
+            // If the alpha is not 0, update it
+            if (current.A > reductionFactor)
+            {
+                // Casually fade out the colour
+                statusStrip.BackColor = Color.FromArgb(current.A - reductionFactor, current.R, current.G, current.B);
+            } else
+            {
+                // Once it is 0, stop the timer and set the colour to completely transparent
+                statusStrip.BackColor = Color.FromArgb(0, 0, 0, 0);
+                statusStripUpdater.Stop();
+            }
         }
 
         private int compareWikiString(string wikiStringA, string wikiStringB)
@@ -53,9 +81,13 @@ namespace WikiApp
             }
         }
 
-        private void updateStatus(string status)
+        private void updateStatus(string status, Color colour)
         {
             statusStripLabel.Text = status;
+            statusStrip.BackColor = colour;
+            
+            // Colour updated, start the fade effect
+            statusStripUpdater.Start();
         }
 
         private void updateDisplay()
@@ -108,7 +140,7 @@ namespace WikiApp
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
             {
-                updateStatus("Invalid field input");
+                updateStatus("Invalid field input", Color.Red);
                 return;
             }
 
@@ -125,7 +157,7 @@ namespace WikiApp
                     wiki[row, 3] = definition;
 
                     // Inserted so exit
-                    updateStatus("Wiki item inserted");
+                    updateStatus("Wiki item inserted", Color.Green);
                     clearFields();
                     updateDisplay();
                     return;
@@ -133,7 +165,7 @@ namespace WikiApp
             }
 
             // If loop finishes, wiki is full
-            updateStatus("Unable to insert wiki item. Wiki is full.");
+            updateStatus("Unable to insert wiki item. Wiki is full.", Color.Red);
 
         }
 
@@ -165,7 +197,7 @@ namespace WikiApp
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
             {
-                updateStatus("Invalid field input");
+                updateStatus("Invalid field input", Color.Red);
                 return;
             }
 
@@ -185,14 +217,14 @@ namespace WikiApp
                 wiki[selectedIndex, 3] = textBoxDefinition.Text;
 
                 // Update the display
-                updateStatus("Edited wiki item.");
+                updateStatus("Edited wiki item.", Color.Green);
                 clearFields();
                 updateDisplay();
                 return;
             }
 
             // No item was selected
-            updateStatus("Unable to update wiki item. No item selected.");
+            updateStatus("Unable to update wiki item. No item selected.", Color.Red);
         }
 
         //9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
@@ -219,7 +251,7 @@ namespace WikiApp
                     wiki[selectedIndex, 3] = "";
 
                     // Update the display
-                    updateStatus("Deleted wiki item.");
+                    updateStatus("Deleted wiki item.", Color.Green);
                     clearFields();
                     updateDisplay();
                 }
@@ -228,7 +260,7 @@ namespace WikiApp
             }
 
             // No item was selected
-            updateStatus("Unable to delete wiki item. No item selected.");
+            updateStatus("Unable to delete wiki item. No item selected.", Color.Red);
         }
 
         // 9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
@@ -265,7 +297,7 @@ namespace WikiApp
                 }
             }
 
-            updateStatus("Saving to " + Path.GetFileName(sfd.FileName) + " complete.");
+            updateStatus("Saving to '" + Path.GetFileName(sfd.FileName) + "' complete.", Color.Green);
         }
 
         // 9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
@@ -306,12 +338,12 @@ namespace WikiApp
                 }
 
                 // Update display
-                updateStatus("Reading file '" + ofd.SafeFileName + "' complete.");
+                updateStatus("Reading file '" + ofd.SafeFileName + "' complete.", Color.Green);
                 updateDisplay();
             }
             else
             {
-                updateStatus("Unable to open file '" + ofd.SafeFileName + "'. File does not exist.");
+                updateStatus("Unable to open file '" + ofd.SafeFileName + "'. File does not exist.", Color.Red);
             }
         }
 
@@ -354,7 +386,7 @@ namespace WikiApp
             }
 
             // Sorting is complete, update display
-            updateStatus("Wiki sorted by name.");
+            updateStatus("Wiki sorted by name.", Color.Green);
             updateDisplay();
         }
 
@@ -366,7 +398,7 @@ namespace WikiApp
 
             if (string.IsNullOrEmpty(target))
             {
-                updateStatus("Input is invalid.");
+                updateStatus("Input is invalid.", Color.Red);
             }
 
             // target is a valid choice, search for it with binary search
@@ -392,7 +424,7 @@ namespace WikiApp
                 // Check for match
                 if (comparisonResult == 0)
                 {
-                    updateStatus("Found target value.");
+                    updateStatus("Found target value.", Color.Green);
                     listViewDisplay.Items[mid].Selected = true;
                     displayFieldData(mid);
                     return;
@@ -409,7 +441,7 @@ namespace WikiApp
                 }
             }
 
-            updateStatus("Target not found in wiki.");
+            updateStatus("Target not found in wiki.", Color.Red);
         }
     }
 }
