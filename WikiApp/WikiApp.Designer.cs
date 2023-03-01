@@ -67,7 +67,7 @@
             this.listViewDisplay.Location = new System.Drawing.Point(271, 12);
             this.listViewDisplay.Name = "listViewDisplay";
             this.listViewDisplay.Size = new System.Drawing.Size(262, 452);
-            this.listViewDisplay.TabIndex = 0;
+            this.listViewDisplay.TabIndex = 13;
             this.listViewDisplay.UseCompatibleStateImageBehavior = false;
             this.listViewDisplay.View = System.Windows.Forms.View.Details;
             this.listViewDisplay.SelectedIndexChanged += new System.EventHandler(this.listViewDisplay_SelectedIndexChanged);
@@ -87,7 +87,7 @@
             this.textBoxName.Location = new System.Drawing.Point(6, 61);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(237, 20);
-            this.textBoxName.TabIndex = 1;
+            this.textBoxName.TabIndex = 9;
             this.textBoxName.DoubleClick += new System.EventHandler(this.textBoxName_DoubleClick);
             // 
             // buttonSave
@@ -95,7 +95,7 @@
             this.buttonSave.Location = new System.Drawing.Point(6, 19);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
-            this.buttonSave.TabIndex = 2;
+            this.buttonSave.TabIndex = 1;
             this.buttonSave.Text = "Save";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
@@ -105,7 +105,7 @@
             this.buttonLoad.Location = new System.Drawing.Point(87, 19);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(75, 23);
-            this.buttonLoad.TabIndex = 3;
+            this.buttonLoad.TabIndex = 2;
             this.buttonLoad.Text = "Load";
             this.buttonLoad.UseVisualStyleBackColor = true;
             this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
@@ -156,7 +156,7 @@
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
             this.textBoxDefinition.Size = new System.Drawing.Size(237, 96);
-            this.textBoxDefinition.TabIndex = 8;
+            this.textBoxDefinition.TabIndex = 12;
             // 
             // label4
             // 
@@ -172,7 +172,7 @@
             this.textBoxStructure.Location = new System.Drawing.Point(6, 155);
             this.textBoxStructure.Name = "textBoxStructure";
             this.textBoxStructure.Size = new System.Drawing.Size(237, 20);
-            this.textBoxStructure.TabIndex = 6;
+            this.textBoxStructure.TabIndex = 11;
             // 
             // label2
             // 
@@ -188,7 +188,7 @@
             this.textBoxCategory.Location = new System.Drawing.Point(6, 107);
             this.textBoxCategory.Name = "textBoxCategory";
             this.textBoxCategory.Size = new System.Drawing.Size(237, 20);
-            this.textBoxCategory.TabIndex = 4;
+            this.textBoxCategory.TabIndex = 10;
             // 
             // label1
             // 
@@ -204,7 +204,7 @@
             this.buttonDelete.Location = new System.Drawing.Point(168, 19);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
-            this.buttonDelete.TabIndex = 2;
+            this.buttonDelete.TabIndex = 8;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
@@ -214,7 +214,7 @@
             this.buttonEdit.Location = new System.Drawing.Point(87, 19);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(75, 23);
-            this.buttonEdit.TabIndex = 1;
+            this.buttonEdit.TabIndex = 7;
             this.buttonEdit.Text = "Edit";
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
@@ -224,7 +224,7 @@
             this.buttonAdd.Location = new System.Drawing.Point(6, 19);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(75, 23);
-            this.buttonAdd.TabIndex = 0;
+            this.buttonAdd.TabIndex = 6;
             this.buttonAdd.Text = "Add";
             this.buttonAdd.UseVisualStyleBackColor = true;
             this.buttonAdd.Click += new System.EventHandler(this.buttonAdd_Click);
@@ -246,7 +246,7 @@
             this.buttonSort.Location = new System.Drawing.Point(87, 19);
             this.buttonSort.Name = "buttonSort";
             this.buttonSort.Size = new System.Drawing.Size(75, 23);
-            this.buttonSort.TabIndex = 1;
+            this.buttonSort.TabIndex = 4;
             this.buttonSort.Text = "Sort";
             this.buttonSort.UseVisualStyleBackColor = true;
             this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
@@ -256,7 +256,7 @@
             this.buttonSearch.Location = new System.Drawing.Point(6, 19);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
-            this.buttonSearch.TabIndex = 0;
+            this.buttonSearch.TabIndex = 3;
             this.buttonSearch.Text = "Search";
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
@@ -282,7 +282,7 @@
             this.textBoxSearch.Location = new System.Drawing.Point(6, 47);
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(241, 20);
-            this.textBoxSearch.TabIndex = 2;
+            this.textBoxSearch.TabIndex = 5;
             // 
             // WikiApp
             // 

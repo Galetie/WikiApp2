@@ -1,4 +1,10 @@
-﻿using System;
+﻿/**
+ * Name:    Jarryd Hassall
+ * SID:     30063186
+ * Date:    01/03/2023
+ */
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -365,7 +371,7 @@ namespace WikiApp
         }
 
         //9.6	Write the code for a Bubble Sort method to sort the 2D array by Name ascending, ensure you use a separate swap method that passes the array element to be swapped (do not use any built-in array methods),
-        private void buttonSort_Click(object sender, EventArgs e)
+        private void sortData()
         {
             // Bubble sort the array
             // Sorting by name means we target column index 0
@@ -386,15 +392,24 @@ namespace WikiApp
             updateDisplay();
         }
 
+        private void buttonSort_Click(object sender, EventArgs e)
+        {
+            sortData();
+        }
+
         //9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void buttonSearch_Click(object sender, EventArgs e)
         {
+            // Sort the data first
+            sortData();
+
             // validate the search term
             string target = textBoxSearch.Text;
 
             if (string.IsNullOrEmpty(target))
             {
                 updateStatus("Input is invalid.", Color.Red);
+                return;
             }
 
             // target is a valid choice, search for it with binary search
