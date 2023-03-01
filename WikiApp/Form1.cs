@@ -60,7 +60,7 @@ namespace WikiApp
             {
                 return 1;
             } 
-            else if (!string.IsNullOrEmpty(wikiStringA) && string.IsNullOrEmpty(wikiStringB))
+            else if (string.IsNullOrEmpty(wikiStringB))
             {
                 return -1;
             }
@@ -407,21 +407,15 @@ namespace WikiApp
             while (first <= last)
             {
                 mid = (first + last) / 2;
-                
-                // Account for possible empty spots in the sorted array
-                if (string.IsNullOrEmpty(wiki[mid, 0]))
-                {
-                    last = mid - 1;
-                    continue;
-                }
 
+                // Compare the entry and the target
                 comparisonResult = compareWikiString(wiki[mid, 0], target);
 
                 // Check for match
                 if (comparisonResult == 0)
                 {
-                    updateStatus("Found target value.", Color.Green);
                     listViewDisplay.Items[mid].Selected = true;
+                    updateStatus("Found target value.", Color.Green);
                     clearFields();
                     displayFieldData(mid);
                     return;
