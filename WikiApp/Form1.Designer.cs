@@ -51,6 +51,7 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -65,7 +66,7 @@
             this.listViewDisplay.HideSelection = false;
             this.listViewDisplay.Location = new System.Drawing.Point(271, 12);
             this.listViewDisplay.Name = "listViewDisplay";
-            this.listViewDisplay.Size = new System.Drawing.Size(262, 426);
+            this.listViewDisplay.Size = new System.Drawing.Size(262, 452);
             this.listViewDisplay.TabIndex = 0;
             this.listViewDisplay.UseCompatibleStateImageBehavior = false;
             this.listViewDisplay.View = System.Windows.Forms.View.Details;
@@ -83,10 +84,11 @@
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(6, 74);
+            this.textBoxName.Location = new System.Drawing.Point(6, 61);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(237, 20);
             this.textBoxName.TabIndex = 1;
+            this.textBoxName.DoubleClick += new System.EventHandler(this.textBoxName_DoubleClick);
             // 
             // buttonSave
             // 
@@ -132,7 +134,7 @@
             this.groupBox2.Controls.Add(this.buttonEdit);
             this.groupBox2.Controls.Add(this.textBoxName);
             this.groupBox2.Controls.Add(this.buttonAdd);
-            this.groupBox2.Location = new System.Drawing.Point(12, 122);
+            this.groupBox2.Location = new System.Drawing.Point(12, 149);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(253, 316);
             this.groupBox2.TabIndex = 5;
@@ -142,7 +144,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 198);
+            this.label3.Location = new System.Drawing.Point(3, 185);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(51, 13);
             this.label3.TabIndex = 9;
@@ -150,7 +152,7 @@
             // 
             // textBoxDefinition
             // 
-            this.textBoxDefinition.Location = new System.Drawing.Point(6, 214);
+            this.textBoxDefinition.Location = new System.Drawing.Point(6, 201);
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
             this.textBoxDefinition.Size = new System.Drawing.Size(237, 96);
@@ -159,7 +161,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 152);
+            this.label4.Location = new System.Drawing.Point(3, 139);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(50, 13);
             this.label4.TabIndex = 7;
@@ -167,7 +169,7 @@
             // 
             // textBoxStructure
             // 
-            this.textBoxStructure.Location = new System.Drawing.Point(6, 168);
+            this.textBoxStructure.Location = new System.Drawing.Point(6, 155);
             this.textBoxStructure.Name = "textBoxStructure";
             this.textBoxStructure.Size = new System.Drawing.Size(237, 20);
             this.textBoxStructure.TabIndex = 6;
@@ -175,7 +177,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 104);
+            this.label2.Location = new System.Drawing.Point(3, 91);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 5;
@@ -183,7 +185,7 @@
             // 
             // textBoxCategory
             // 
-            this.textBoxCategory.Location = new System.Drawing.Point(6, 120);
+            this.textBoxCategory.Location = new System.Drawing.Point(6, 107);
             this.textBoxCategory.Name = "textBoxCategory";
             this.textBoxCategory.Size = new System.Drawing.Size(237, 20);
             this.textBoxCategory.TabIndex = 4;
@@ -191,7 +193,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 58);
+            this.label1.Location = new System.Drawing.Point(3, 45);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 3;
@@ -229,11 +231,12 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.textBoxSearch);
             this.groupBox3.Controls.Add(this.buttonSort);
             this.groupBox3.Controls.Add(this.buttonSearch);
             this.groupBox3.Location = new System.Drawing.Point(12, 67);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(171, 49);
+            this.groupBox3.Size = new System.Drawing.Size(253, 76);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search and Sort";
@@ -262,7 +265,7 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusStripLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 446);
+            this.statusStrip.Location = new System.Drawing.Point(0, 470);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(544, 22);
             this.statusStrip.TabIndex = 7;
@@ -274,11 +277,18 @@
             this.statusStripLabel.Name = "statusStripLabel";
             this.statusStripLabel.Size = new System.Drawing.Size(0, 17);
             // 
+            // textBoxSearch
+            // 
+            this.textBoxSearch.Location = new System.Drawing.Point(6, 47);
+            this.textBoxSearch.Name = "textBoxSearch";
+            this.textBoxSearch.Size = new System.Drawing.Size(241, 20);
+            this.textBoxSearch.TabIndex = 2;
+            // 
             // WikiApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 468);
+            this.ClientSize = new System.Drawing.Size(544, 492);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -291,6 +301,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -323,6 +334,7 @@
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusStripLabel;
+        private System.Windows.Forms.TextBox textBoxSearch;
     }
 }
 

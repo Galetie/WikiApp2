@@ -115,6 +115,9 @@ namespace WikiApp
             textBoxCategory.Text = "";
             textBoxStructure.Text = "";
             textBoxDefinition.Text = "";
+
+            // Reset search box
+            textBoxSearch.Text = "";
         }
 
         // 9.8 Create a display method that will show the following information in a ListView: Name and Category,
@@ -349,23 +352,16 @@ namespace WikiApp
 
         private void swap(int index)
         {
-            // Swap index and index + 1
-            string name = wiki[index, 0];
-            string category = wiki[index, 1];
-            string structure = wiki[index, 2];
-            string definition = wiki[index, 3];
+            // Store temp values
+            string temp;
 
-            // Swap row at index with index + 1
-            wiki[index, 0] = wiki[index + 1, 0];
-            wiki[index, 1] = wiki[index + 1, 1];
-            wiki[index, 2] = wiki[index + 1, 2];
-            wiki[index, 3] = wiki[index + 1, 3];
-
-            // Set row at index + 1 with the data from row at index
-            wiki[index + 1, 0] = name;
-            wiki[index + 1, 1] = category;
-            wiki[index + 1, 2] = structure;
-            wiki[index + 1, 3] = definition;
+            // Swap items
+            for (int i = 0; i < 4; i++)
+            {
+                temp = wiki[index, i];
+                wiki[index, i] = wiki[index + 1, i];
+                wiki[index + 1, i] = temp;
+            }
         }
 
         //9.6	Write the code for a Bubble Sort method to sort the 2D array by Name ascending, ensure you use a separate swap method that passes the array element to be swapped (do not use any built-in array methods),
@@ -394,7 +390,7 @@ namespace WikiApp
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             // validate the search term
-            string target = textBoxName.Text;
+            string target = textBoxSearch.Text;
 
             if (string.IsNullOrEmpty(target))
             {
@@ -426,6 +422,7 @@ namespace WikiApp
                 {
                     updateStatus("Found target value.", Color.Green);
                     listViewDisplay.Items[mid].Selected = true;
+                    clearFields();
                     displayFieldData(mid);
                     return;
                 }
@@ -442,6 +439,12 @@ namespace WikiApp
             }
 
             updateStatus("Target not found in wiki.", Color.Red);
+        }
+
+        private void textBoxName_DoubleClick(object sender, EventArgs e)
+        {
+            clearFields();
+            textBoxName.Focus();
         }
     }
 }
