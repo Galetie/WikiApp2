@@ -415,7 +415,7 @@ namespace WikiApp
             // target is a valid choice, search for it with binary search
             int mid;
             int first = 0;
-            int last = rows;
+            int last = rows - 1;
 
             int comparisonResult;
 
