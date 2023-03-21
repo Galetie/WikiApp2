@@ -28,14 +28,13 @@ namespace WikiApp
         public WikiApp()
         {
             InitializeComponent();
-            initializeWiki();
 
             // Configure timer
             statusStripUpdater.Tick += statusStripColourFade;
             statusStripUpdater.Interval = 5;
         }
 
-        #region Input Getters
+        #region Input Getters | Setters
         private string getInputName()
         {
             return textBoxName.Text.ToLower();
@@ -48,12 +47,13 @@ namespace WikiApp
 
         private string getInputStructure()
         {
-            if (radioButtonLinear.Checked) {
-                return "linear";
-            }
-            if (radioButtonNonLinear.Checked)
+            // Get if any the selected radio button
+            RadioButton selected = groupBoxStructure.Controls.OfType<RadioButton>().FirstOrDefault(rbtn => rbtn.Checked);
+            
+            // If a button is selected, return its text
+            if (selected != null)
             {
-                return "non-linear";
+                return selected.Text.ToLower();
             }
 
             return null;
@@ -62,6 +62,29 @@ namespace WikiApp
         private string getInputDefinition()
         {
             return textBoxDefinition.Text.ToLower();
+        }
+
+        private void reflectData(string name, string category, string structure, string definition)
+        {
+            // Set the easy values
+            textBoxName.Text = name;
+            textBoxDefinition.Text = definition;
+
+            // Set the combobox
+            comboBoxCategory.SelectedIndex = comboBoxCategory.FindStringExact(category);
+
+            // Try to find a radio button with the right text
+            RadioButton target = groupBoxStructure.Controls.OfType<RadioButton>().FirstOrDefault(rbtn => rbtn.Text.ToLower().CompareTo(structure) == 0);
+
+            // If a radio button was found great!
+            // If not tell the user of the error
+            if (target != null)
+            {
+                target.Checked = true;
+            } else
+            {
+                updateStatus("Error parsing structure from selection?", Color.Red);
+            }
         }
         #endregion
 
@@ -102,18 +125,6 @@ namespace WikiApp
             return string.Compare(wikiStringA, wikiStringB);
         }
 
-        private void initializeWiki()
-        {
-            // Initialize the wiki array with empty strings
-            for (int row = 0; row < rows; row++)
-            {
-                for (int column = 0; column < columns; column++)
-                {
-                    wiki[row, column] = "";
-                }
-            }
-        }
-
         private void updateStatus(string status, Color colour)
         {
             statusStripLabel.Text = status;
@@ -140,7 +151,6 @@ namespace WikiApp
             }
         }
 
-        // 9.5 Create a CLEAR method to clear the four text boxes so a new definition can be added,
         private void clearFields()
         {
             // Reset each field to an empty string
@@ -153,7 +163,6 @@ namespace WikiApp
             textBoxSearch.Text = "";
         }
 
-        // 9.8 Create a display method that will show the following information in a ListView: Name and Category,
         private void displayFieldData(int index)
         {
             // Update input fields to reflect the data
@@ -163,7 +172,6 @@ namespace WikiApp
             textBoxDefinition.Text = wiki[index, 3];
         }
 
-        //9.2 Create an ADD button that will store the information from the 4 text boxes into the 2D array,
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
@@ -194,7 +202,6 @@ namespace WikiApp
             updateDisplay();
         }
 
-        // 9.9 Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
         private void listViewDisplay_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -209,14 +216,13 @@ namespace WikiApp
             }
         }
 
-        // 9.3 Create an EDIT button that will allow the user to modify any information from the 4 text boxes into the 2D array,
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             // Validate input
-            string name = textBoxName.Text;
-            string category = textBoxCategory.Text;
-            string structure = textBoxStructure.Text;
-            string definition = textBoxDefinition.Text;
+            string name = getInputName();
+            string category = getInputCategory();
+            string structure = getInputStructure();
+            string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
@@ -236,10 +242,7 @@ namespace WikiApp
                 selectedIndex = listViewDisplay.SelectedIndices[0];
 
                 // Update input fields to reflect the data
-                wiki[selectedIndex, 0] = textBoxName.Text;
-                wiki[selectedIndex, 1] = textBoxCategory.Text;
-                wiki[selectedIndex, 2] = textBoxStructure.Text;
-                wiki[selectedIndex, 3] = textBoxDefinition.Text;
+                wiki[selectedIndex] = new Information(name, category, structure, definition);
 
                 // Update the display
                 updateStatus("Edited wiki item.", Color.Green);
@@ -252,7 +255,6 @@ namespace WikiApp
             updateStatus("Unable to update wiki item. No item selected.", Color.Red);
         }
 
-        //9.4	Create a DELETE button that removes all the information from a single entry of the array; the user must be prompted before the final deletion occurs, 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -269,11 +271,8 @@ namespace WikiApp
 
                 if (dialogResult == DialogResult.Yes)
                 {
-                    // Clear the fields
-                    wiki[selectedIndex, 0] = "";
-                    wiki[selectedIndex, 1] = "";
-                    wiki[selectedIndex, 2] = "";
-                    wiki[selectedIndex, 3] = "";
+                    // Clear the information
+                    wiki.RemoveAt(selectedIndex);
 
                     // Update the display
                     updateStatus("Deleted wiki item.", Color.Green);
@@ -288,7 +287,6 @@ namespace WikiApp
             updateStatus("Unable to delete wiki item. No item selected.", Color.Red);
         }
 
-        // 9.10	Create a SAVE button so the information from the 2D array can be written into a binary file called definitions.dat which is sorted by Name, ensure the user has the option to select an alternative file. Use a file stream and BinaryWriter to create the file.
         private void buttonSave_Click(object sender, EventArgs e)
         {
             // Create and configure SaveFielDialog
@@ -325,7 +323,6 @@ namespace WikiApp
             updateStatus("Saving to '" + Path.GetFileName(sfd.FileName) + "' complete.", Color.Green);
         }
 
-        // 9.11	Create a LOAD button that will read the information from a binary file called definitions.dat into the 2D array, ensure the user has the option to select an alternative file. Use a file stream and BinaryReader to complete this task.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             // Create and configure OpenFileDialog
@@ -375,27 +372,23 @@ namespace WikiApp
         private void swap(int index)
         {
             // Store temp values
-            string temp;
+            Information temp = wiki[index + 1];
 
             // Swap items
-            for (int i = 0; i < 4; i++)
-            {
-                temp = wiki[index, i];
-                wiki[index, i] = wiki[index + 1, i];
-                wiki[index + 1, i] = temp;
-            }
+            wiki[index + 1] = wiki[index];
+            wiki[index] = temp;
         }
 
-        //9.6	Write the code for a Bubble Sort method to sort the 2D array by Name ascending, ensure you use a separate swap method that passes the array element to be swapped (do not use any built-in array methods),
         private void sortData()
         {
-            // Bubble sort the array
-            // Sorting by name means we target column index 0
-            for (int row = 0; row < rows - 1; row++)
+            int count = wiki.Count;
+
+            // Bubble sort the list
+            for (int limit = 0; limit < count; limit++)
             {
-                for (int swapIndex = 0; swapIndex < rows - 1 - row; swapIndex++)
+                for (int swapIndex = 0; swapIndex < count - limit - 1; swapIndex++)
                 {
-                    if (compareWikiString(wiki[swapIndex, 0], wiki[swapIndex + 1, 0]) > 0)
+                    if (wiki[swapIndex].CompareTo(wiki[swapIndex + 1]) > 0)
                     {
                         // Swap swapIndex with swapIndex + 1
                         swap(swapIndex);
@@ -413,7 +406,6 @@ namespace WikiApp
             sortData();
         }
 
-        //9.7	Write the code for a Binary Search for the Name in the 2D array and display the information in the other textboxes when found, add suitable feedback if the search in not successful and clear the search textbox (do not use any built-in array methods),
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             // Sort the data first
