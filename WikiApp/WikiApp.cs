@@ -24,6 +24,7 @@ namespace WikiApp
         // Time will gradually update the status strip colour until default
         static Timer statusStripUpdater = new Timer();
 
+        // 6.2 Create a global List<T> of type Information called Wiki.
         List<Information> wiki = new List<Information>();
 
         public WikiApp()
@@ -176,6 +177,12 @@ namespace WikiApp
             }
         }
 
+        private bool containsNumOrSpecial(string check)
+        {
+            return check.Any(ch => !(char.IsWhiteSpace(ch) || char.IsLetter(ch)));   
+        }
+
+        //6.3 Create a button method to ADD a new item to the list. Use a TextBox for the Name input, ComboBox for the Category, Radio group for the Structure and Multiline TextBox for the Definition.
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
@@ -184,6 +191,7 @@ namespace WikiApp
             string structure = getInputStructure();
             string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
+                containsNumOrSpecial(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
@@ -228,6 +236,7 @@ namespace WikiApp
             string structure = getInputStructure();
             string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
+                containsNumOrSpecial(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
