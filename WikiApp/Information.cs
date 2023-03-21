@@ -46,13 +46,13 @@ namespace WikiApp
         public string getName() { return this.name; }
         public string getCategory() { return this.category; }
         public string getStructure() { return this.structure; }
-        public string getDescription() { return this.description; }
+        public string getDefinition() { return this.description; }
 
         // Setter for each property
         public void setName(string change) { this.name = change; }
         public void setCategory(string change) { this.category = change; }
         public void setStructure(string change) { this.structure = change; }
-        public void setDescription(string change) { this.description = change; }
+        public void setDefinition(string change) { this.description = change; }
 
     }
 }

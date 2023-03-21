@@ -15,6 +15,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace WikiApp
 {
@@ -59,32 +60,14 @@ namespace WikiApp
             return null;
         }
 
+        private string getInputSearch()
+        {
+            return textBoxSearch.Text.ToLower();
+        }
+
         private string getInputDefinition()
         {
             return textBoxDefinition.Text.ToLower();
-        }
-
-        private void reflectData(string name, string category, string structure, string definition)
-        {
-            // Set the easy values
-            textBoxName.Text = name;
-            textBoxDefinition.Text = definition;
-
-            // Set the combobox
-            comboBoxCategory.SelectedIndex = comboBoxCategory.FindStringExact(category);
-
-            // Try to find a radio button with the right text
-            RadioButton target = groupBoxStructure.Controls.OfType<RadioButton>().FirstOrDefault(rbtn => rbtn.Text.ToLower().CompareTo(structure) == 0);
-
-            // If a radio button was found great!
-            // If not tell the user of the error
-            if (target != null)
-            {
-                target.Checked = true;
-            } else
-            {
-                updateStatus("Error parsing structure from selection?", Color.Red);
-            }
         }
         #endregion
 
@@ -140,11 +123,11 @@ namespace WikiApp
             listViewDisplay.Items.Clear();
 
             // Add items to the display
-            for (int row = 0; row < rows; row++)
+            foreach (Information info in wiki)
             {
                 // Populate the item
-                ListViewItem item = new ListViewItem(wiki[row, 0]);
-                item.SubItems.Add(wiki[row, 1]);
+                ListViewItem item = new ListViewItem(info.getName());
+                item.SubItems.Add(info.getCategory());
 
                 // Add the item
                 listViewDisplay.Items.Add(item);
@@ -155,21 +138,42 @@ namespace WikiApp
         {
             // Reset each field to an empty string
             textBoxName.Text = "";
-            textBoxCategory.Text = "";
-            textBoxStructure.Text = "";
+            comboBoxCategory.SelectedIndex = -1;
             textBoxDefinition.Text = "";
 
             // Reset search box
             textBoxSearch.Text = "";
+
+            // Reset the radio buttons
+            foreach (RadioButton btn in groupBoxStructure.Controls.OfType<RadioButton>())
+            {
+                btn.Checked = false;
+            }
         }
 
-        private void displayFieldData(int index)
+        private void displayFieldData(Information info)
         {
             // Update input fields to reflect the data
-            textBoxName.Text = wiki[index, 0];
-            textBoxCategory.Text = wiki[index, 1];
-            textBoxStructure.Text = wiki[index, 2];
-            textBoxDefinition.Text = wiki[index, 3];
+            // Set the easy values
+            textBoxName.Text = info.getName();
+            textBoxDefinition.Text = info.getDefinition(); ;
+
+            // Set the combobox
+            comboBoxCategory.SelectedIndex = comboBoxCategory.FindStringExact(info.getCategory());
+
+            // Try to find a radio button with the right text
+            RadioButton target = groupBoxStructure.Controls.OfType<RadioButton>().FirstOrDefault(rbtn => rbtn.Text.ToLower().CompareTo(info.getStructure()) == 0);
+
+            // If a radio button was found great!
+            // If not tell the user of the error
+            if (target != null)
+            {
+                target.Checked = true;
+            }
+            else
+            {
+                updateStatus("Error parsing structure from selection?", Color.Red);
+            }
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
@@ -212,7 +216,7 @@ namespace WikiApp
                 selectedIndex = listViewDisplay.SelectedIndices[0];
 
                 // Display the data in the input field boxes
-                displayFieldData(selectedIndex);
+                displayFieldData(wiki[selectedIndex]);
             }
         }
 
@@ -309,13 +313,16 @@ namespace WikiApp
                 // Create a binary writer to write data to the file
                 using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
                 {
+                    // Write the number of records being saved
+                    writer.Write(wiki.Count);
+
                     // Write each wiki entry to the file
-                    for (int row = 0; row < rows; row++)
+                    foreach (Information info in wiki)
                     {
-                        writer.Write(wiki[row, 0]);
-                        writer.Write(wiki[row, 1]);
-                        writer.Write(wiki[row, 2]);
-                        writer.Write(wiki[row, 3]);
+                        writer.Write(info.getName());
+                        writer.Write(info.getCategory());
+                        writer.Write(info.getStructure());
+                        writer.Write(info.getDefinition());
                     }
                 }
             }
@@ -348,13 +355,17 @@ namespace WikiApp
                     // Create a reader to read from the file stream
                     using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
                     {
+                        int numRecords = reader.ReadInt32();
+
                         // Read each item from the file
-                        for (int row = 0; row < rows; row++)
+                        for (int i = 0; i < numRecords; i++)
                         {
-                            wiki[row, 0] = reader.ReadString();
-                            wiki[row, 1] = reader.ReadString();
-                            wiki[row, 2] = reader.ReadString();
-                            wiki[row, 3] = reader.ReadString();
+                            wiki.Add(new Information(
+                                reader.ReadString(),
+                                reader.ReadString(),
+                                reader.ReadString(),
+                                reader.ReadString())
+                                );
                         }
                     }
                 }
@@ -412,7 +423,7 @@ namespace WikiApp
             sortData();
 
             // validate the search term
-            string target = textBoxSearch.Text;
+            string target = getInputSearch();
 
             if (string.IsNullOrEmpty(target))
             {
@@ -423,7 +434,7 @@ namespace WikiApp
             // target is a valid choice, search for it with binary search
             int mid;
             int first = 0;
-            int last = rows - 1;
+            int last = wiki.Count - 1;
 
             int comparisonResult;
 
@@ -432,7 +443,7 @@ namespace WikiApp
                 mid = (first + last) / 2;
 
                 // Compare the entry and the target
-                comparisonResult = compareWikiString(wiki[mid, 0], target);
+                comparisonResult = wiki[mid].getName().CompareTo(target);
 
                 // Check for match
                 if (comparisonResult == 0)
@@ -440,7 +451,7 @@ namespace WikiApp
                     listViewDisplay.Items[mid].Selected = true;
                     updateStatus("Found target value.", Color.Green);
                     clearFields();
-                    displayFieldData(mid);
+                    displayFieldData(wiki[mid]);
                     return;
                 }
 
