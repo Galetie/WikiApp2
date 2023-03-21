@@ -176,6 +176,10 @@ namespace WikiApp
             }
         }
 
+        private bool containsNumOrSpecial(string check)
+        {
+            return check.Any(ch => !(char.IsWhiteSpace(ch) || char.IsLetter(ch)));   
+        }
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
@@ -184,6 +188,7 @@ namespace WikiApp
             string structure = getInputStructure();
             string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
+                containsNumOrSpecial(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
@@ -228,6 +233,7 @@ namespace WikiApp
             string structure = getInputStructure();
             string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
+                containsNumOrSpecial(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
