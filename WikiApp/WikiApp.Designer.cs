@@ -38,24 +38,26 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxDefinition = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxStructure = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBoxCategory = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonEdit = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.textBoxSearch = new System.Windows.Forms.TextBox();
             this.buttonSort = new System.Windows.Forms.Button();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.textBoxSearch = new System.Windows.Forms.TextBox();
+            this.comboBoxCategory = new System.Windows.Forms.ComboBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.radioButtonLinear = new System.Windows.Forms.RadioButton();
+            this.radioButtonNonLinear = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.statusStrip.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // listViewDisplay
@@ -66,7 +68,7 @@
             this.listViewDisplay.HideSelection = false;
             this.listViewDisplay.Location = new System.Drawing.Point(271, 12);
             this.listViewDisplay.Name = "listViewDisplay";
-            this.listViewDisplay.Size = new System.Drawing.Size(262, 452);
+            this.listViewDisplay.Size = new System.Drawing.Size(259, 452);
             this.listViewDisplay.TabIndex = 13;
             this.listViewDisplay.UseCompatibleStateImageBehavior = false;
             this.listViewDisplay.View = System.Windows.Forms.View.Details;
@@ -123,12 +125,11 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.groupBox4);
+            this.groupBox2.Controls.Add(this.comboBoxCategory);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.textBoxDefinition);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.textBoxStructure);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.textBoxCategory);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.buttonDelete);
             this.groupBox2.Controls.Add(this.buttonEdit);
@@ -158,22 +159,6 @@
             this.textBoxDefinition.Size = new System.Drawing.Size(237, 96);
             this.textBoxDefinition.TabIndex = 12;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 139);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 13);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Structure";
-            // 
-            // textBoxStructure
-            // 
-            this.textBoxStructure.Location = new System.Drawing.Point(6, 155);
-            this.textBoxStructure.Name = "textBoxStructure";
-            this.textBoxStructure.Size = new System.Drawing.Size(237, 20);
-            this.textBoxStructure.TabIndex = 11;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -182,13 +167,6 @@
             this.label2.Size = new System.Drawing.Size(49, 13);
             this.label2.TabIndex = 5;
             this.label2.Text = "Category";
-            // 
-            // textBoxCategory
-            // 
-            this.textBoxCategory.Location = new System.Drawing.Point(6, 107);
-            this.textBoxCategory.Name = "textBoxCategory";
-            this.textBoxCategory.Size = new System.Drawing.Size(237, 20);
-            this.textBoxCategory.TabIndex = 10;
             // 
             // label1
             // 
@@ -241,6 +219,13 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Search and Sort";
             // 
+            // textBoxSearch
+            // 
+            this.textBoxSearch.Location = new System.Drawing.Point(6, 47);
+            this.textBoxSearch.Name = "textBoxSearch";
+            this.textBoxSearch.Size = new System.Drawing.Size(241, 20);
+            this.textBoxSearch.TabIndex = 5;
+            // 
             // buttonSort
             // 
             this.buttonSort.Location = new System.Drawing.Point(87, 19);
@@ -265,9 +250,9 @@
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusStripLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 470);
+            this.statusStrip.Location = new System.Drawing.Point(0, 476);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(544, 22);
+            this.statusStrip.Size = new System.Drawing.Size(542, 22);
             this.statusStrip.TabIndex = 7;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -277,18 +262,59 @@
             this.statusStripLabel.Name = "statusStripLabel";
             this.statusStripLabel.Size = new System.Drawing.Size(0, 17);
             // 
-            // textBoxSearch
+            // comboBoxCategory
             // 
-            this.textBoxSearch.Location = new System.Drawing.Point(6, 47);
-            this.textBoxSearch.Name = "textBoxSearch";
-            this.textBoxSearch.Size = new System.Drawing.Size(241, 20);
-            this.textBoxSearch.TabIndex = 5;
+            this.comboBoxCategory.FormattingEnabled = true;
+            this.comboBoxCategory.Items.AddRange(new object[] {
+            "Array",
+            "List",
+            "Tree",
+            "Graph",
+            "Abstract",
+            "Hash"});
+            this.comboBoxCategory.Location = new System.Drawing.Point(7, 108);
+            this.comboBoxCategory.Name = "comboBoxCategory";
+            this.comboBoxCategory.Size = new System.Drawing.Size(236, 21);
+            this.comboBoxCategory.TabIndex = 13;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.radioButtonNonLinear);
+            this.groupBox4.Controls.Add(this.radioButtonLinear);
+            this.groupBox4.Location = new System.Drawing.Point(7, 135);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(236, 47);
+            this.groupBox4.TabIndex = 14;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Structure";
+            // 
+            // radioButtonLinear
+            // 
+            this.radioButtonLinear.AutoSize = true;
+            this.radioButtonLinear.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonLinear.Name = "radioButtonLinear";
+            this.radioButtonLinear.Size = new System.Drawing.Size(54, 17);
+            this.radioButtonLinear.TabIndex = 14;
+            this.radioButtonLinear.TabStop = true;
+            this.radioButtonLinear.Text = "Linear";
+            this.radioButtonLinear.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonNonLinear
+            // 
+            this.radioButtonNonLinear.AutoSize = true;
+            this.radioButtonNonLinear.Location = new System.Drawing.Point(87, 19);
+            this.radioButtonNonLinear.Name = "radioButtonNonLinear";
+            this.radioButtonNonLinear.Size = new System.Drawing.Size(77, 17);
+            this.radioButtonNonLinear.TabIndex = 15;
+            this.radioButtonNonLinear.TabStop = true;
+            this.radioButtonNonLinear.Text = "Non-Linear";
+            this.radioButtonNonLinear.UseVisualStyleBackColor = true;
             // 
             // WikiApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 492);
+            this.ClientSize = new System.Drawing.Size(542, 498);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -304,6 +330,8 @@
             this.groupBox3.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -321,10 +349,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxDefinition;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxStructure;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBoxCategory;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.Button buttonEdit;
@@ -335,6 +360,10 @@
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusStripLabel;
         private System.Windows.Forms.TextBox textBoxSearch;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.RadioButton radioButtonNonLinear;
+        private System.Windows.Forms.RadioButton radioButtonLinear;
+        private System.Windows.Forms.ComboBox comboBoxCategory;
     }
 }
 
