@@ -23,10 +23,7 @@ namespace WikiApp
         // Time will gradually update the status strip colour until default
         static Timer statusStripUpdater = new Timer();
 
-        const int rows = 12;
-        const int columns = 4;
-        // 9.1 Create a global 2D string array, use static variables for the dimensions (row = 4, column = 12),
-        string[,] wiki = new string[rows, columns];
+        List<Information> wiki = new List<Information>();
 
         public WikiApp()
         {
@@ -37,6 +34,36 @@ namespace WikiApp
             statusStripUpdater.Tick += statusStripColourFade;
             statusStripUpdater.Interval = 5;
         }
+
+        #region Input Getters
+        private string getInputName()
+        {
+            return textBoxName.Text.ToLower();
+        }
+
+        private string getInputCategory()
+        {
+            return comboBoxCategory.Text.ToLower();
+        }
+
+        private string getInputStructure()
+        {
+            if (radioButtonLinear.Checked) {
+                return "linear";
+            }
+            if (radioButtonNonLinear.Checked)
+            {
+                return "non-linear";
+            }
+
+            return null;
+        }
+
+        private string getInputDefinition()
+        {
+            return textBoxDefinition.Text.ToLower();
+        }
+        #endregion
 
         private void statusStripColourFade(object sender, EventArgs e)
         {
@@ -140,10 +167,10 @@ namespace WikiApp
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             // Validate all form data
-            string name = textBoxName.Text;
-            string category = textBoxCategory.Text;
-            string structure = textBoxStructure.Text;
-            string definition = textBoxDefinition.Text;
+            string name = getInputName();
+            string category = getInputCategory();
+            string structure = getInputStructure();
+            string definition = getInputDefinition();
             if (string.IsNullOrEmpty(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
@@ -153,29 +180,18 @@ namespace WikiApp
                 return;
             }
 
-            // If everything is valid, insert the new item
-            // Find an empty spot to insert in to
-            for (int row = 0; row < rows; row++)
+            // Check for unique values
+            if (wiki.FindIndex(i => i.getName().CompareTo(name) == 0) > -1)
             {
-                if (string.IsNullOrEmpty(wiki[row, 0]))
-                {
-                    // Found a spot to insert to
-                    wiki[row, 0] = name;
-                    wiki[row, 1] = category;
-                    wiki[row, 2] = structure;
-                    wiki[row, 3] = definition;
-
-                    // Inserted so exit
-                    updateStatus("Wiki item inserted", Color.Green);
-                    clearFields();
-                    updateDisplay();
-                    return;
-                }
+                updateStatus("Only unique name values may be inserted", Color.Red);
+                return;
             }
 
-            // If loop finishes, wiki is full
-            updateStatus("Unable to insert wiki item. Wiki is full.", Color.Red);
-
+            // Add the new item
+            wiki.Add(new Information(name, category, structure, definition));
+            updateStatus("Wiki item inserted", Color.Green);
+            clearFields();
+            updateDisplay();
         }
 
         // 9.9 Create a method so the user can select a definition (Name) from the ListView and all the information is displayed in the appropriate Textboxes,
