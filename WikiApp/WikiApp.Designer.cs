@@ -177,14 +177,8 @@
             // 
             // comboBoxCategory
             // 
+            this.comboBoxCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxCategory.FormattingEnabled = true;
-            this.comboBoxCategory.Items.AddRange(new object[] {
-            "Array",
-            "List",
-            "Tree",
-            "Graph",
-            "Abstract",
-            "Hash"});
             this.comboBoxCategory.Location = new System.Drawing.Point(7, 108);
             this.comboBoxCategory.Name = "comboBoxCategory";
             this.comboBoxCategory.Size = new System.Drawing.Size(236, 21);
@@ -323,6 +317,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "WikiApp";
             this.Text = "WikiApp";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.WikiApp_FormClosing);
+            this.Load += new System.EventHandler(this.WikiApp_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();

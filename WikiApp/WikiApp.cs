@@ -47,6 +47,7 @@ namespace WikiApp
             return comboBoxCategory.Text.ToLower();
         }
 
+        // 6.6 Create two methods to highlight and return the values from the Radio button GroupBox. The first method must return a string value from the selected radio button (Linear or Non-Linear). The second method must send an integer index which will highlight an appropriate radio button.
         private string getInputStructure()
         {
             // Get if any the selected radio button
@@ -69,6 +70,22 @@ namespace WikiApp
         private string getInputDefinition()
         {
             return textBoxDefinition.Text.ToLower();
+        }
+
+        // 6.6 Create two methods to highlight and return the values from the Radio button GroupBox. The first method must return a string value from the selected radio button (Linear or Non-Linear). The second method must send an integer index which will highlight an appropriate radio button.
+        private void setSelectedStructure(int index)
+        {
+            // 0 for linear
+            // 1 for non linear
+            switch (index)
+            {
+                case 0:
+                    radioButtonLinear.Checked = true;
+                    break;
+                case 1:
+                    radioButtonNonLinear.Checked = true;
+                    break;
+            }
         }
         #endregion
 
@@ -93,22 +110,6 @@ namespace WikiApp
             }
         }
 
-        private int compareWikiString(string wikiStringA, string wikiStringB)
-        {
-            // Consider empty strings to be greater when compared against anything
-            if (string.IsNullOrEmpty(wikiStringA))
-            {
-                return 1;
-            } 
-            else if (string.IsNullOrEmpty(wikiStringB))
-            {
-                return -1;
-            }
-
-            // Otherwise return the result of a regular string comparison
-            return string.Compare(wikiStringA, wikiStringB);
-        }
-
         private void updateStatus(string status, Color colour)
         {
             statusStripLabel.Text = status;
@@ -118,13 +119,17 @@ namespace WikiApp
             statusStripUpdater.Start();
         }
 
-        private void updateDisplay()
+        // 6.9 Create a single custom method that will sort and then display the Name and Category from the wiki information in the list.
+        private void updateAndSortDisplay()
         {
+            // Sort the list
+            wiki.Sort();
+
             // Clear the display
             listViewDisplay.Items.Clear();
 
             // Add items to the display
-            foreach (Information info in wiki)
+            foreach (var info in wiki)
             {
                 // Populate the item
                 ListViewItem item = new ListViewItem(info.getName());
@@ -135,6 +140,7 @@ namespace WikiApp
             }
         }
 
+        // 6.12 Create a custom method that will clear and reset the TextBoxes, ComboBox and Radio button
         private void clearFields()
         {
             // Reset each field to an empty string
@@ -146,7 +152,7 @@ namespace WikiApp
             textBoxSearch.Text = "";
 
             // Reset the radio buttons
-            foreach (RadioButton btn in groupBoxStructure.Controls.OfType<RadioButton>())
+            foreach (var btn in groupBoxStructure.Controls.OfType<RadioButton>())
             {
                 btn.Checked = false;
             }
@@ -162,24 +168,33 @@ namespace WikiApp
             // Set the combobox
             comboBoxCategory.SelectedIndex = comboBoxCategory.FindStringExact(info.getCategory());
 
-            // Try to find a radio button with the right text
-            RadioButton target = groupBoxStructure.Controls.OfType<RadioButton>().FirstOrDefault(rbtn => rbtn.Text.ToLower().CompareTo(info.getStructure()) == 0);
-
-            // If a radio button was found great!
-            // If not tell the user of the error
-            if (target != null)
+            // Set the structure
+            switch (info.getStructure())
             {
-                target.Checked = true;
-            }
-            else
-            {
-                updateStatus("Error parsing structure from selection?", Color.Red);
+                case "linear":
+                    setSelectedStructure(0);
+                    break;
+                case "non-linear":
+                    setSelectedStructure(1);
+                    break;
+                default:
+                    updateStatus("Error parsing structure from selection", Color.Red);
+                    break;
             }
         }
 
-        private bool containsNumOrSpecial(string check)
+        // 6.5 Create a custom ValidName method which will take a parameter string value from the Textbox Name and returns a Boolean after checking for duplicates. Use the built in List<T> method “Exists” to answer this requirement.
+        private bool validName(string name)
         {
-            return check.Any(ch => !(char.IsWhiteSpace(ch) || char.IsLetter(ch)));   
+            // Check for null empty
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            } else if (name.Any(ch => (!char.IsWhiteSpace(ch) && !char.IsLetter(ch))))
+            {
+                return false;
+            }
+            return true;
         }
 
         //6.3 Create a button method to ADD a new item to the list. Use a TextBox for the Name input, ComboBox for the Category, Radio group for the Structure and Multiline TextBox for the Definition.
@@ -190,8 +205,7 @@ namespace WikiApp
             string category = getInputCategory();
             string structure = getInputStructure();
             string definition = getInputDefinition();
-            if (string.IsNullOrEmpty(name) ||
-                containsNumOrSpecial(name) ||
+            if (!validName(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
@@ -211,9 +225,10 @@ namespace WikiApp
             wiki.Add(new Information(name, category, structure, definition));
             updateStatus("Wiki item inserted", Color.Green);
             clearFields();
-            updateDisplay();
+            updateAndSortDisplay();
         }
 
+        // 6.11 Create a ListView event so a user can select a Data Structure Name from the list of Names and the associated information will be displayed in the related text boxes combo box and radio button.
         private void listViewDisplay_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -228,6 +243,7 @@ namespace WikiApp
             }
         }
 
+        // 6.8 Create a button method that will save the edited record of the currently selected item in the ListView. All the changes in the input controls will be written back to the list. Display an updated version of the sorted list at the end of this process.
         private void buttonEdit_Click(object sender, EventArgs e)
         {
             // Validate input
@@ -235,8 +251,7 @@ namespace WikiApp
             string category = getInputCategory();
             string structure = getInputStructure();
             string definition = getInputDefinition();
-            if (string.IsNullOrEmpty(name) ||
-                containsNumOrSpecial(name) ||
+            if (validName(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
@@ -260,7 +275,7 @@ namespace WikiApp
                 // Update the display
                 updateStatus("Edited wiki item.", Color.Green);
                 clearFields();
-                updateDisplay();
+                updateAndSortDisplay();
                 return;
             }
 
@@ -268,6 +283,7 @@ namespace WikiApp
             updateStatus("Unable to update wiki item. No item selected.", Color.Red);
         }
 
+        // 6.7 Create a button method that will delete the currently selected record in the ListView. Ensure the user has the option to backout of this action by using a dialog box. Display an updated version of the sorted list at the end of this process.
         private void buttonDelete_Click(object sender, EventArgs e)
         {
             int selectedIndex;
@@ -290,7 +306,7 @@ namespace WikiApp
                     // Update the display
                     updateStatus("Deleted wiki item.", Color.Green);
                     clearFields();
-                    updateDisplay();
+                    updateAndSortDisplay();
                 }
 
                 return;
@@ -300,7 +316,7 @@ namespace WikiApp
             updateStatus("Unable to delete wiki item. No item selected.", Color.Red);
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void saveWiki()
         {
             // Create and configure SaveFielDialog
             SaveFileDialog sfd = new SaveFileDialog
@@ -326,7 +342,7 @@ namespace WikiApp
                     writer.Write(wiki.Count);
 
                     // Write each wiki entry to the file
-                    foreach (Information info in wiki)
+                    foreach (var info in wiki)
                     {
                         writer.Write(info.getName());
                         writer.Write(info.getCategory());
@@ -339,6 +355,13 @@ namespace WikiApp
             updateStatus("Saving to '" + Path.GetFileName(sfd.FileName) + "' complete.", Color.Green);
         }
 
+        // 6.14 Create two buttons for the manual open and save option; this must use a dialog box to select a file or rename a saved file. All Wiki data is stored/retrieved using a binary reader/writer file format.
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            saveWiki();
+        }
+
+        // 6.14 Create two buttons for the manual open and save option; this must use a dialog box to select a file or rename a saved file. All Wiki data is stored/retrieved using a binary reader/writer file format.
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             // Create and configure OpenFileDialog
@@ -347,6 +370,7 @@ namespace WikiApp
                 Title = "Open dat file",
                 Filter = "DAT files|*.dat"
             };
+            ofd.InitialDirectory = Application.StartupPath;
 
             // Open a file dialog box and prompt the user to select a file to open
             if (ofd.ShowDialog() != DialogResult.OK)
@@ -381,7 +405,7 @@ namespace WikiApp
 
                 // Update display
                 updateStatus("Reading file '" + ofd.SafeFileName + "' complete.", Color.Green);
-                updateDisplay();
+                updateAndSortDisplay();
             }
             else
             {
@@ -389,99 +413,65 @@ namespace WikiApp
             }
         }
 
-        private void swap(int index)
-        {
-            // Store temp values
-            Information temp = wiki[index + 1];
-
-            // Swap items
-            wiki[index + 1] = wiki[index];
-            wiki[index] = temp;
-        }
-
-        private void sortData()
-        {
-            int count = wiki.Count;
-
-            // Bubble sort the list
-            for (int limit = 0; limit < count; limit++)
-            {
-                for (int swapIndex = 0; swapIndex < count - limit - 1; swapIndex++)
-                {
-                    if (wiki[swapIndex].CompareTo(wiki[swapIndex + 1]) > 0)
-                    {
-                        // Swap swapIndex with swapIndex + 1
-                        swap(swapIndex);
-                    }
-                }
-            }
-
-            // Sorting is complete, update display
-            updateStatus("Wiki sorted by name.", Color.Green);
-            updateDisplay();
-        }
-
         private void buttonSort_Click(object sender, EventArgs e)
         {
-            sortData();
+            updateAndSortDisplay();
         }
 
+        // 6.10 Create a button method that will use the builtin binary search to find a Data Structure name. If the record is found the associated details will populate the appropriate input controls and highlight the name in the ListView. At the end of the search process the search input TextBox must be cleared.
         private void buttonSearch_Click(object sender, EventArgs e)
         {
             // Sort the data first
-            sortData();
+            updateAndSortDisplay();
 
-            // validate the search term
+            // Get the target and binary search
             string target = getInputSearch();
+            int index = wiki.BinarySearch(new Information(target, null, null, null));
 
-            if (string.IsNullOrEmpty(target))
+            // Select if found
+            if (index >= 0)
             {
-                updateStatus("Input is invalid.", Color.Red);
-                return;
-            }
-
-            // target is a valid choice, search for it with binary search
-            int mid;
-            int first = 0;
-            int last = wiki.Count - 1;
-
-            int comparisonResult;
-
-            while (first <= last)
+                listViewDisplay.Items[index].Selected = true;
+                updateStatus("Found target value.", Color.Green);
+                clearFields();
+                displayFieldData(wiki[index]);
+            } else
             {
-                mid = (first + last) / 2;
-
-                // Compare the entry and the target
-                comparisonResult = wiki[mid].getName().CompareTo(target);
-
-                // Check for match
-                if (comparisonResult == 0)
-                {
-                    listViewDisplay.Items[mid].Selected = true;
-                    updateStatus("Found target value.", Color.Green);
-                    clearFields();
-                    displayFieldData(wiki[mid]);
-                    return;
-                }
-
-                // Move the first and last if applicable
-                if (comparisonResult > 0)
-                {
-                    last = mid - 1;
-                }
-                else
-                {
-                    first = mid + 1;
-                }
+                updateStatus("Target not found in wiki.", Color.Red);
             }
-
-            updateStatus("Target not found in wiki.", Color.Red);
         }
 
+        // 6.13 Create a double click event on the Name TextBox to clear the TextBboxes, ComboBox and Radio button.
         private void textBoxName_DoubleClick(object sender, EventArgs e)
         {
             clearFields();
             textBoxName.Focus();
+        }
+
+        //6.4 Create a custom method to populate the ComboBox when the Form Load method is called. The six categories must be read from a simple text file.
+        private void WikiApp_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var value in System.IO.File.ReadLines(Application.StartupPath + @"\cat.txt"))
+                {
+                    comboBoxCategory.Items.Add(value);
+                }
+            }
+            catch
+            {
+                updateStatus("Unable to open category file: " + Application.StartupPath + @"\cat.txt", Color.Red);
+            }
+        }
+
+        // 6.15 The Wiki application will save data when the form closes. 
+        private void WikiApp_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Check if the user wants to save then save
+            if (MessageBox.Show("Do you want to save before closing?", "Save?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                saveWiki();
+            }
         }
     }
 }

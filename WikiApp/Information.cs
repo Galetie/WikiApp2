@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace WikiApp
 {
-    internal class Information : IComparable
+    [Serializable]
+    internal class Information : IComparable<Information>
     {
         // Information stored here
         private string name;
@@ -20,15 +21,15 @@ namespace WikiApp
         private string description;
 
         // Constructor
-        public Information(string name, string category, string structure, string description) {
-            this.name = name;
-            this.category = category;
-            this.structure = structure; 
-            this.description = description;
+        public Information(string newName, string newCategory, string newStructure, string newDescription) {
+            name = newName;
+            category = newCategory;
+            structure = newStructure; 
+            description = newDescription;
         }
 
         // Implement the CompareTo function
-        public int CompareTo(Object other)
+        public int CompareTo(Information other)
         {
             // Check other exists
             if (other == null)
@@ -48,16 +49,16 @@ namespace WikiApp
         }
 
         // Getter for each property
-        public string getName() { return this.name; }
-        public string getCategory() { return this.category; }
-        public string getStructure() { return this.structure; }
-        public string getDefinition() { return this.description; }
+        public string getName() { return name; }
+        public string getCategory() { return category; }
+        public string getStructure() { return structure; }
+        public string getDefinition() { return description; }
 
         // Setter for each property
-        public void setName(string change) { this.name = change; }
-        public void setCategory(string change) { this.category = change; }
-        public void setStructure(string change) { this.structure = change; }
-        public void setDefinition(string change) { this.description = change; }
+        public void setName(string newName) { name = newName; }
+        public void setCategory(string newCategory) { category = newCategory; }
+        public void setStructure(string newStructure) { structure = newStructure; }
+        public void setDefinition(string newDefinition) { description = newDefinition; }
 
     }
 }
