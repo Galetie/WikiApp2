@@ -1,7 +1,7 @@
 ﻿/**
  * Name:    Jarryd Hassall
  * SID:     30063186
- * Date:    01/03/2023
+ * Date:    22/03/2023
  */
 
 using System;
@@ -251,7 +251,7 @@ namespace WikiApp
             string category = getInputCategory();
             string structure = getInputStructure();
             string definition = getInputDefinition();
-            if (validName(name) ||
+            if (!validName(name) ||
                 string.IsNullOrEmpty(category) ||
                 string.IsNullOrEmpty(structure) ||
                 string.IsNullOrEmpty(definition))
@@ -435,6 +435,7 @@ namespace WikiApp
                 updateStatus("Found target value.", Color.Green);
                 clearFields();
                 displayFieldData(wiki[index]);
+                this.ActiveControl = textBoxName;
             } else
             {
                 updateStatus("Target not found in wiki.", Color.Red);

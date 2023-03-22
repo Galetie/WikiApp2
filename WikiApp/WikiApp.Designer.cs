@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.listViewDisplay = new System.Windows.Forms.ListView();
             this.itemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Category = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,6 +54,7 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusStripLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBoxStructure.SuspendLayout();
@@ -90,6 +92,7 @@
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(237, 20);
             this.textBoxName.TabIndex = 9;
+            this.toolTip1.SetToolTip(this.textBoxName, "Double Click to clear input fields");
             this.textBoxName.DoubleClick += new System.EventHandler(this.textBoxName_DoubleClick);
             // 
             // buttonSave
@@ -198,7 +201,7 @@
             this.textBoxDefinition.Location = new System.Drawing.Point(6, 201);
             this.textBoxDefinition.Multiline = true;
             this.textBoxDefinition.Name = "textBoxDefinition";
-            this.textBoxDefinition.Size = new System.Drawing.Size(237, 96);
+            this.textBoxDefinition.Size = new System.Drawing.Size(237, 109);
             this.textBoxDefinition.TabIndex = 12;
             // 
             // label2
@@ -360,6 +363,7 @@
         private System.Windows.Forms.RadioButton radioButtonNonLinear;
         private System.Windows.Forms.RadioButton radioButtonLinear;
         private System.Windows.Forms.ComboBox comboBoxCategory;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
